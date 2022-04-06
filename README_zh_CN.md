@@ -187,15 +187,15 @@ What data points get out-of-order in real-world applications is not uncommon bec
 If out-of-order data points are within the range of the head memory partition, they get temporarily buffered and merged at flush time.
 Sometimes we should handle data points that cross a partition boundary. That is the reason why `tstorage` keeps more than one partition writable.
 
-## More
-Want to know more details on tstorage internal? If so see the blog post: [Write a time-series database engine from scratch](https://nakabonne.dev/posts/write-tsdb-from-scratch).
+## 更多
+想要知道 tstorage 更多的内部细节？可以看这个博客：[Write a time-series database engine from scratch](https://nakabonne.dev/posts/write-tsdb-from-scratch).
 
-## Acknowledgements
-This package is implemented based on tons of existing ideas. What I especially got inspired by are:
+## 致谢
+这个项目的开发是基于成千上万的开放思想。特别受启发于：
 - https://misfra.me/state-of-the-state-part-iii
 - https://fabxc.org/tsdb
 - https://questdb.io/blog/2020/11/26/why-timeseries-data
 - https://akumuli.org/akumuli/2017/04/29/nbplustree
 - https://github.com/VictoriaMetrics/VictoriaMetrics
 
-A big "thank you!" goes out to all of them.
+非常感谢这里的所有人。
