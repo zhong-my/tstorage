@@ -1,20 +1,17 @@
-# tstorage [![Go Reference](https://pkg.go.dev/badge/mod/github.com/nakabonne/tstorage.svg)](https://pkg.go.dev/mod/github.com/nakabonne/tstorage)（[中文翻译在这里](./README_zh_CN.md)）
+# tstorage [![Go Reference](https://pkg.go.dev/badge/mod/github.com/nakabonne/tstorage.svg)](https://pkg.go.dev/mod/github.com/nakabonne/tstorage)
 
-`tstorage` is a lightweight local on-disk storage engine for time-series data with a straightforward API.
-Especially ingestion is massively optimized as it provides goroutine safe capabilities of write into and read from TSDB that partitions data points by time.
+`tstorage` 是一个轻量级的本地磁盘存储引擎，用于处理时间序列数据，具有简单的API。特别是对写入和读取 TSDB 的 goroutine 安全功能做了大量优化，并支持按时间划分数据点。
 
-## Motivation
-I'm working on a couple of tools that handle a tremendous amount of time-series data, such as [Ali](https://github.com/nakabonne/ali) and [Gosivy](https://github.com/nakabonne/gosivy).
-Especially Ali, I had been facing a problem of increasing heap consumption over time as it's a load testing tool that aims to perform real-time analysis.
-I little poked around a fast TSDB library that offers simple APIs but eventually nothing works as well as I'd like, that's why I settled on writing this package myself.
+## 动机
 
-To see how much `tstorage` has helped improve Ali's performance, see the release notes [here](https://github.com/nakabonne/ali/releases/tag/v0.7.0).
+我正在开发几个工具，用于处理大量的时间序列数据，例如 [Ali](https://github.com/nakabonne/ali) 和 [Gosivy](https://github.com/nakabonne/gosivy)。特别是 Ali，我一直面临一个问题，随着时间的推移，堆的消耗越来也大，因为它是一个进行实时分析的负载测试工具。我在一个提供 API 的快速 TSDB 库中小试牛刀，但最终没有任何东西能如我所愿，这就是为什么我决定自己编写这个包。
 
-## Usage
-Currently, `tstorage` requires Go version 1.16 or greater
+要了解 `tstorage` 对 Ali 的性能提升有多大帮助，请看发行说明 [here](https://github.com/nakabonne/ali/releases/tag/v0.7.0)。
 
-By default, `tstorage.Storage` works as an in-memory database.
-The below example illustrates how to insert a row into the memory and immediately select it.
+## 运用
+当前，`tstorage` 支持 Go 1.16 或以上版本。
+
+默认情况下，`tstorage.Storage` 作为内存数据库。以下例子说明了如何添加一行到内存中并搜索它。
 
 ```go
 package main
@@ -45,8 +42,8 @@ func main() {
 }
 ```
 
-### Using disk
-To make time-series data persistent on disk, specify the path to directory that stores time-series data through [WithDataPath](https://pkg.go.dev/github.com/nakabonne/tstorage#WithDataPath) option.
+### 使用磁盘
+要使时间序列数据在磁盘上持久存在，需要设定存储目录路径 [WithDataPath](https://pkg.go.dev/github.com/nakabonne/tstorage#WithDataPath) 的选项。
 
 ```go
 storage, _ := tstorage.NewStorage(
@@ -55,9 +52,8 @@ storage, _ := tstorage.NewStorage(
 defer storage.Close()
 ```
 
-### Labeled metrics
-In tstorage, you can identify a metric with combination of metric name and optional labels.
-Here is an example of insertion a labeled metric to the disk.
+### 标记
+在 tstorage，你可以给 metric 的组合定义名字和可选的标签。下面是一个向磁盘插入 metric 标签的例子
 
 ```go
 metric := "mem_alloc_bytes"
@@ -75,10 +71,10 @@ _ = storage.InsertRows([]tstorage.Row{
 points, _ := storage.Select(metric, labels, 1600000000, 1600000001)
 ```
 
-For more examples see [the documentation](https://pkg.go.dev/github.com/nakabonne/tstorage#pkg-examples).
+更多例子看这里 [文档](https://pkg.go.dev/github.com/nakabonne/tstorage#pkg-examples).
 
-## Benchmarks
-Benchmark tests were made using Intel(R) Core(TM) i7-8559U CPU @ 2.70GHz with 16GB of RAM on macOS 10.15.7
+## 基准测试
+基础测试将使用计算机 Intel(R) Core(TM) i7-8559U CPU @ 2.70GHz with 16GB of RAM on macOS 10.15.7
 
 ```
 $ go version
@@ -96,7 +92,7 @@ PASS
 ok  	github.com/nakabonne/tstorage	16.501s
 ```
 
-## Internal
+## 内部细节
 Time-series database has specific characteristics in its workload.
 In terms of write operations, a time-series database has to ingest a tremendous amount of data points ordered by time.
 Time-series data is immutable, mostly an append-only workload with delete operations performed in batches on less recent data.
