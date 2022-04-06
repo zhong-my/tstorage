@@ -126,13 +126,13 @@ Key benefits:
 - Most read operations work fast because recent data get cached in heap.
 - When a partition gets full, we can persist the data from our in-memory database by sequentially writing just a handful of larger files. We avoid any write-amplification and serve SSDs and HDDs equally well.
 
-### Memory partition
+### 内存分区
 The memory partition is writable and stores data points in heap. The head partition is always memory partition. Its next one is also memory partition to accept out-of-order data points.
 It stores data points in an ordered Slice, which offers excellent cache hit ratio compared to linked lists unless it gets updated way too often (like delete, add elements at random locations).
 
 All incoming data is written to a write-ahead log (WAL) right before inserting into a memory partition to prevent data loss.
 
-### Disk partition
+### 磁盘分区
 The old memory partitions get compacted and persisted to the directory prefixed with `p-`, under the directory specified with the [WithDataPath](https://pkg.go.dev/github.com/nakabonne/tstorage#WithDataPath) option.
 Here is the macro layout of disk partitions:
 
@@ -182,7 +182,7 @@ $ cat ./data/p-1600000001-1600003600/meta.json
 Each metric has its own file offset of the beginning.
 Data point slice for each metric is compressed separately, so all we have to do when reading is to seek, and read the points off.
 
-### Out-of-order data points
+### 无序数据点
 What data points get out-of-order in real-world applications is not uncommon because of network latency or clock synchronization issues; `tstorage` basically doesn't discard them.
 If out-of-order data points are within the range of the head memory partition, they get temporarily buffered and merged at flush time.
 Sometimes we should handle data points that cross a partition boundary. That is the reason why `tstorage` keeps more than one partition writable.
